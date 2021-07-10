@@ -1,0 +1,57 @@
+# Dependencies and Setup
+import pandas as pd
+
+# File to Load (Remember to Change These)
+file_to_load = "Resources/purchase_data.csv"
+
+# Read Purchasing File and store into Pandas data frame
+purchase_data = pd.read_csv(file_to_load)
+PD_df = pd.DataFrame(purchase_data)
+PD_df
+
+
+# Find total players and make a DataFrame display
+Pcount = len(pd.unique(PD_df["SN"]))
+# len(Pcount)
+Numdf = pd.DataFrame({"Total Players": [Pcount]})
+Numdf.head()
+
+
+
+# Assign variables for use in the dataframe
+Uitem = len(pd.unique(PD_df["Item Name"]))
+avg_p = (PD_df["Price"].mean())
+numpur = len(PD_df["Purchase ID"].value_counts())
+totalp = float(PD_df["Price"].sum())
+
+# Load values into Dataframe and display
+panalysis = pd.DataFrame({"Number of Unique Items": [Uitem], "Average Price":[avg_p], "Number of Purchases": [numpur], "Total Revenue": [totalp]})
+panalysis.head()
+
+
+
+# group using gender as key
+gender = PD_df.groupby("Gender")
+# Count names by gender
+countgender = gender.nunique()["SN"]
+#formula for percentages
+percentG = round((countgender/Pcount)*100).astype(str) + '%'
+# create gender dataframe 
+gender_df = pd.DataFrame({"Total Count": countgender,"Percentage of Players": percentG})
+gender_df.index.name = None
+gender_df
+
+
+
+# formulate variables by gender
+Pcount = round(gender["Price"].count(), 0)
+Aprice = round(gender["Price"].mean(), 2)
+Tprice = round(gender["Price"].sum(), 2) 
+AvgbyG = round(Tprice/countgender, 2)
+
+# input variables into DataFrame, transpose and print
+df = pd.DataFrame([Pcount, Aprice, Tprice, AvgbyG])
+df2 = df.T
+df2.columns = ['Purchase Count', 'Average Purchase Price', 
+               'Total Purchase Value', 'Avg Total Purchase per Person']
+df2
