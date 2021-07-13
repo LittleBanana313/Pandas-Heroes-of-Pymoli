@@ -1,0 +1,12 @@
+# create a dataframe for grouping an formulate variables
+popdf = PD_df.groupby(['Item ID', 'Item Name'])
+tpv_2 = round(popdf['Price'].sum(),2)
+pcount8 = popdf['Gender'].count()
+aspend2 = round(popdf['Price'].mean(),2)
+# create a new dataframe to hold values
+popdf2 = pd.DataFrame([pcount8, aspend2, tpv_2])
+popdf2 = popdf2.T
+popdf2.columns = ['Purchase Count', 'Item Price', 'Total Purchase Value']
+# Sort values and fix funky headers
+## popdf2 = popdf2.rename_axis('Item Name', axis='columns')
+popdf2.sort_values('Purchase Count', ascending=False).head(5)
